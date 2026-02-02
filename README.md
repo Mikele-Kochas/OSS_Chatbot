@@ -54,6 +54,12 @@ sudo systemctl restart docker
     docker exec -it ollama-backend ollama run gpt-oss:120b
     ```
 
+    **Chcesz mniejszy model?**
+    Możesz też pobrać wersję 20B (działa szybciej):
+    ```bash
+    docker exec -it ollama-backend ollama run gpt-oss:20b
+    ```
+
 ## Access
 Open your browser and go to: `http://<SERVER_IP>:8501`
 

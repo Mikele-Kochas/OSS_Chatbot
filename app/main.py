@@ -5,10 +5,11 @@ import json
 # Configuration
 OLLAMA_HOST = "http://ollama:11434"
 DEFAULT_MODEL = "gpt-oss:120b"
+ALTERNATIVE_MODEL = "gpt-oss:20b"
 
 st.set_page_config(page_title="Tytan Chatbot", page_icon="🤖", layout="wide")
 
-st.title("🤖 Tytan Chatbot (GPT-OSS 120B)")
+st.title("🤖 Tytan Chatbot (GPT-OSS)")
 
 # Initialize chat history
 if "messages" not in st.session_state:
@@ -21,11 +22,17 @@ with st.sidebar:
         response = requests.get(f"{OLLAMA_HOST}/api/tags")
         if response.status_code == 200:
             models = [m['name'] for m in response.json().get('models', [])]
-            # Ensure our target model is in the list or set as default option
-            if DEFAULT_MODEL not in models:
-                 models.append(DEFAULT_MODEL) # Just in case it's not pulled yet, still show it
             
-            selected_model = st.selectbox("Select Model", models, index=models.index(DEFAULT_MODEL) if DEFAULT_MODEL in models else 0)
+            # Ensure our target models are in the list
+            if DEFAULT_MODEL not in models:
+                 models.append(DEFAULT_MODEL)
+            if ALTERNATIVE_MODEL not in models:
+                 models.append(ALTERNATIVE_MODEL)
+            
+            # Sort to keep our preferred models at the top
+            models.sort(key=lambda x: (x != DEFAULT_MODEL, x != ALTERNATIVE_MODEL))
+            
+            selected_model = st.selectbox("Select Model", models)
         else:
             st.error("Could not fetch models from Ollama.")
             selected_model = DEFAULT_MODEL
@@ -35,7 +42,7 @@ with st.sidebar:
     
     st.markdown("---")
     st.markdown("**User Info:**")
-    st.markdown("- Model: `gpt-oss:120b`")
+    st.markdown(f"- Active Model: `{selected_model}`")
     if st.button("Clear Chat"):
         st.session_state.messages = []
         st.rerun()
