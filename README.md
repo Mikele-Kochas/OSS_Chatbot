@@ -26,20 +26,37 @@ sudo systemctl restart docker
 sudo systemctl restart docker
 ```
 
-## How to Install (via GitHub)
+## How to Install (Detailed Steps)
 
-1.  **Clone the repository** on your server:
+1.  **Connect to your server via SSH**:
+    ```bash
+    ssh username@your-server-ip
+    ```
+
+2.  **Clone the repository** (This will automatically create a folder named `OSS_Chatbot`):
     ```bash
     git clone https://github.com/Mikele-Kochas/OSS_Chatbot.git
+    ```
+
+3.  **Enter the folder**:
+    ```bash
     cd OSS_Chatbot
     ```
 
-## Deployment Instructions
-
-1.  **Build and Run**:
+4.  **Start the Chatbot**:
     ```bash
     docker-compose up -d --build
     ```
+
+5.  **Initialize the Model** (One-time setup):
+    Wait for the containers to start, then run:
+    ```bash
+    docker exec -it ollama-backend ollama run gpt-oss:120b
+    ```
+
+## Access
+Open your browser and go to: `http://<SERVER_IP>:8501`
+
 3.  **Download the Model**:
     The container needs to download the `gpt-oss:120b` model. This might take a while (approx. 70-80GB depending on quantization).
     Run the following command *inside* the running ollama container:
