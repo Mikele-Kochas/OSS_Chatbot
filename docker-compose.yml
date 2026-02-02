@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama-backend
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: always
+    networks:
+      - chat-net
+
+  chatbot:
+    build: ./app
+    container_name: chat-ui
+    ports:
+      - "8501:8501"
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    depends_on:
+      - ollama
+    restart: always
+    networks:
+      - chat-net
+
+volumes:
+  ollama_data:
+
+networks:
+  chat-net:
+    driver: bridge
