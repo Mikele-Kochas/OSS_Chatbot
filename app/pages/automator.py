@@ -59,9 +59,8 @@ if start_btn and uploaded_file:
                 "Ground Truth": ground_truth
             }
             
-            # Construct Prompt (Same as in validator.py)
-            prompt = f"""
-Jesteś surowym i precyzyjnym ekspertem oceniającym wnioski grantowe. Twoim zadaniem jest ocena projektu na podstawie dostarczonych danych pod kątem dwóch kryteriów krytycznych.
+            # Construct Prompt - JSON OUTPUT FORMAT
+            prompt = f"""Jesteś surowym i precyzyjnym ekspertem oceniającym wnioski grantowe. Twoim zadaniem jest ocena projektu na podstawie dostarczonych danych pod kątem dwóch kryteriów krytycznych.
 
 DANE WEJŚCIOWE:
 1. PROFIL INSTYTUTU:
@@ -77,23 +76,20 @@ DANE WEJŚCIOWE:
 {results_field}
 
 KRYTERIA OCENY:
-1. DOPASOWANIE DO PROFILU: Czy projekt mieści się w obszarze badawczym i kompetencyjnym instytutu? Jeśli projekt pasowałby lepiej do innego typu instytutu, należy to wypunktować.
-2. KOMERCJALIZACJA: Czy wyniki prowadzą do rynkowej komercjalizacji (sprzedaż, licencja), czy jest to tylko "wdrożenie własne" lub realizacja potrzeb wewnętrznych (co jest błędem)? Projekt musi mieć potencjał rynkowy.
+1. DOPASOWANIE DO PROFILU: Czy projekt mieści się w obszarze badawczym i kompetencyjnym instytutu?
+2. KOMERCJALIZACJA: Czy wyniki prowadzą do rynkowej komercjalizacji (sprzedaż, licencja), a nie tylko "wdrożenia własnego"?
 
-WYMAGANY FORMAT ODPOWIEDZI:
-Analizę przedstaw w punktach, a na końcu wydaj jednoznaczną opinię.
+ODPOWIEDZ W FORMACIE JSON (i TYLKO JSON, bez żadnego innego tekstu):
+{{
+  "analiza_profilu": "Twoja analiza zgodności z profilem instytutu...",
+  "analiza_komercjalizacji": "Twoja analiza potencjału komercjalizacyjnego...",
+  "werdykt": "GO",
+  "uzasadnienie": "Krótkie uzasadnienie decyzji..."
+}}
 
-### 1. Analiza Zgodności z Profilem
-...
-
-### 2. Analiza Potencjału Komercjalizacyjnego
-...
-
-### WERDYKT KOŃCOWY
-**[GO / NO-GO]**
-
-### UZASADNIENIE
-...
+WAŻNE:
+- Pole "werdykt" MUSI zawierać DOKŁADNIE jedno z dwóch słów: "GO" lub "NO-GO" (wielkimi literami, bez innych znaków).
+- Odpowiedz TYLKO poprawnym JSON-em, bez żadnych dodatkowych komentarzy przed ani po.
 """
             
             for model in MODELS_TO_TEST:
@@ -103,7 +99,8 @@ Analizę przedstaw w punktach, a na końcu wydaj jednoznaczną opinię.
                     "model": model,
                     "prompt": prompt,
                     "stream": False,
-                    "options": {"temperature": 0.0} # Deterministic for testing
+                    "format": "json",  # Ollama hint for JSON output
+                    "options": {"temperature": 0.0}
                 }
                 
                 try:
@@ -114,24 +111,17 @@ Analizę przedstaw w punktach, a na końcu wydaj jednoznaczną opinię.
                     if resp.status_code == 200:
                         full_text = resp.json().get('response', '')
                         
-                        # Parse Verdict - ONLY from WERDYKT section
-                        verdict_section = ""
-                        werdykt_match = re.search(r'WERDYKT[^\n]*\n([\s\S]{0,100})', full_text, re.IGNORECASE)
-                        if werdykt_match:
-                            verdict_section = werdykt_match.group(0)
-                        else:
-                            verdict_section = full_text[-200:] # Fallback
-                        
-                        verdict = "UNCERTAIN"
-                        if re.search(r'NO[- _]?GO', verdict_section, re.IGNORECASE):
-                            verdict = "NO-GO"
-                        elif re.search(r'\*\*GO\*\*|\bGO\b', verdict_section, re.IGNORECASE):
-                            verdict = "GO"
+                        # Parse JSON response
+                        try:
+                            result_json = json.loads(full_text)
+                            verdict = result_json.get("werdykt", "").strip().upper()
+                        except json.JSONDecodeError:
+                            verdict = "JSON_ERROR"
                         
                         row[f"{model} Verdict"] = verdict
                         row[f"{model} Time"] = round(end_ts - start_ts, 2)
                         
-                        # Check Match
+                        # Check Match - EXACT comparison
                         is_correct = (verdict == ground_truth)
                         row[f"{model} Correct"] = is_correct
                         
