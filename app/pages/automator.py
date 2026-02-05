@@ -2,7 +2,6 @@ import streamlit as st
 import requests
 import json
 import pandas as pd
-import re
 import time
 
 st.set_page_config(page_title="Automator Testów", page_icon="⚙️", layout="wide")
@@ -15,14 +14,11 @@ st.markdown("Automatyczne porównanie skuteczności modeli (120B vs 20B) na pods
 
 # --- CONFIGURATION ---
 with st.expander("Konfiguracja Testu", expanded=True):
-    # Institute Profile (Global for this batch)
     default_profile = "Instytut Łukasiewicz-AI specjalizuje się w badaniach nad sztuczną inteligencją, uczeniem maszynowym, cyberbezpieczeństwem oraz cyfryzacją procesów przemysłowych. Główne obszary to: algorytmy NLP, computer vision, systemy autonomiczne oraz bezpieczeństwo infrastruktury IT. Instytut nie zajmuje się rolnictwem, biotechnologią żywności ani energetyką konwencjonalną."
     institute_profile = st.text_area("Profil Instytutu (użyty dla wszystkich fiszek):", value=default_profile, height=100)
     
-    # File Uploader
     uploaded_file = st.file_uploader("Wgraj plik JSON z fiszkami", type=["json"])
     
-    # Run Button
     start_btn = st.button("Uruchom Test Porównawczy", type="primary", disabled=not uploaded_file)
 
 # --- LOGIC ---
@@ -41,12 +37,12 @@ if start_btn and uploaded_file:
         current_step = 0
         
         for item in data:
-            # Extract fields from JSON
             doc_id = item.get("id_pliku", "N/A")
             goal = item.get("cel_projektu", "")
             innovations = "\n".join(item.get("glowne_funkcjonalnosci", [])) if isinstance(item.get("glowne_funkcjonalnosci"), list) else item.get("glowne_funkcjonalnosci", "")
             results_field = "\n".join(item.get("rezultaty", [])) if isinstance(item.get("rezultaty"), list) else item.get("rezultaty", "")
-            # Normalize ground truth: "go" -> "GO", "no-go" -> "NO-GO"
+            
+            # Normalize ground truth
             raw_gt = item.get("werdykt", "").upper().replace(" ", "-")
             if "NO" in raw_gt:
                 ground_truth = "NO-GO"
@@ -59,8 +55,8 @@ if start_btn and uploaded_file:
                 "Ground Truth": ground_truth
             }
             
-            # Construct Prompt - JSON OUTPUT FORMAT
-            prompt = f"""Jesteś surowym i precyzyjnym ekspertem oceniającym wnioski grantowe. Twoim zadaniem jest ocena projektu na podstawie dostarczonych danych pod kątem dwóch kryteriów krytycznych.
+            # Construct Prompt - MARKER-BASED FORMAT
+            prompt = f"""Jesteś surowym i precyzyjnym ekspertem oceniającym wnioski grantowe.
 
 DANE WEJŚCIOWE:
 1. PROFIL INSTYTUTU:
@@ -79,17 +75,23 @@ KRYTERIA OCENY:
 1. DOPASOWANIE DO PROFILU: Czy projekt mieści się w obszarze badawczym i kompetencyjnym instytutu?
 2. KOMERCJALIZACJA: Czy wyniki prowadzą do rynkowej komercjalizacji (sprzedaż, licencja), a nie tylko "wdrożenia własnego"?
 
-ODPOWIEDZ W FORMACIE JSON (i TYLKO JSON, bez żadnego innego tekstu):
-{{
-  "analiza_profilu": "Twoja analiza zgodności z profilem instytutu...",
-  "analiza_komercjalizacji": "Twoja analiza potencjału komercjalizacyjnego...",
-  "werdykt": "GO",
-  "uzasadnienie": "Krótkie uzasadnienie decyzji..."
-}}
+WYMAGANY FORMAT ODPOWIEDZI:
 
-WAŻNE:
-- Pole "werdykt" MUSI zawierać DOKŁADNIE jedno z dwóch słów: "GO" lub "NO-GO" (wielkimi literami, bez innych znaków).
-- Odpowiedz TYLKO poprawnym JSON-em, bez żadnych dodatkowych komentarzy przed ani po.
+### 1. Analiza Zgodności z Profilem
+(Twoja analiza...)
+
+### 2. Analiza Potencjału Komercjalizacyjnego
+(Twoja analiza...)
+
+### UZASADNIENIE
+(Krótkie uzasadnienie decyzji...)
+
+NA SAMYM KOŃCU ODPOWIEDZI MUSISZ UMIEŚCIĆ DOKŁADNIE JEDEN Z PONIŻSZYCH ZNACZNIKÓW (skopiuj go dokładnie):
+<<<WERDYKT: GO>>>
+lub
+<<<WERDYKT: NO-GO>>>
+
+WAŻNE: Znacznik musi być ostatnią linią odpowiedzi, dokładnie w tym formacie z trzema nawiasami ostrymi.
 """
             
             for model in MODELS_TO_TEST:
@@ -99,7 +101,6 @@ WAŻNE:
                     "model": model,
                     "prompt": prompt,
                     "stream": False,
-                    "format": "json",  # Ollama hint for JSON output
                     "options": {"temperature": 0.0}
                 }
                 
@@ -111,12 +112,13 @@ WAŻNE:
                     if resp.status_code == 200:
                         full_text = resp.json().get('response', '')
                         
-                        # Parse JSON response
-                        try:
-                            result_json = json.loads(full_text)
-                            verdict = result_json.get("werdykt", "").strip().upper()
-                        except json.JSONDecodeError:
-                            verdict = "JSON_ERROR"
+                        # Extract verdict from marker - check NO-GO first (more specific)
+                        if "<<<WERDYKT: NO-GO>>>" in full_text:
+                            verdict = "NO-GO"
+                        elif "<<<WERDYKT: GO>>>" in full_text:
+                            verdict = "GO"
+                        else:
+                            verdict = "BRAK_ZNACZNIKA"
                         
                         row[f"{model} Verdict"] = verdict
                         row[f"{model} Time"] = round(end_ts - start_ts, 2)
@@ -155,30 +157,6 @@ WAŻNE:
         
         # Detailed Table
         st.subheader("Szczegółowe Wyniki")
-        
-        # Stylizacja tabeli (highlight errors)
-        def highlight_diff(row):
-            styles = [''] * len(row)
-            # 120B Index
-            idx_120 = df.columns.get_loc(f"{MODELS_TO_TEST[0]} Verdict")
-            idx_120_corr = df.columns.get_loc(f"{MODELS_TO_TEST[0]} Correct")
-            
-            # 20B Index
-            idx_20 = df.columns.get_loc(f"{MODELS_TO_TEST[1]} Verdict")
-            idx_20_corr = df.columns.get_loc(f"{MODELS_TO_TEST[1]} Correct")
-            
-            if not row[idx_120_corr]:
-                styles[idx_120] = 'background-color: #ffcccc; color: black'
-            else:
-                styles[idx_120] = 'background-color: #ccffcc; color: black'
-                
-            if not row[idx_20_corr]:
-                styles[idx_20] = 'background-color: #ffcccc; color: black'
-            else:
-                styles[idx_20] = 'background-color: #ccffcc; color: black'
-                
-            return styles
-
         st.dataframe(df)
         
         with st.expander("Pobierz wyniki CSV"):

@@ -1,7 +1,6 @@
 import streamlit as st
 import requests
 import json
-import re
 
 st.set_page_config(page_title="Walidator Wniosków", page_icon="📋", layout="wide")
 
@@ -20,13 +19,11 @@ with st.sidebar:
         if response.status_code == 200:
             models = [m['name'] for m in response.json().get('models', [])]
             
-            # Ensure our target models are in the list
             if DEFAULT_MODEL not in models:
                  models.append(DEFAULT_MODEL)
             if ALTERNATIVE_MODEL not in models:
                  models.append(ALTERNATIVE_MODEL)
             
-            # Sort to keep our preferred models at the top
             models.sort(key=lambda x: (x != DEFAULT_MODEL, x != ALTERNATIVE_MODEL))
             
             selected_model = st.selectbox("Select Model", models)
@@ -64,8 +61,8 @@ if st.button("Sprawdź Wniosek (GO / NO-GO)", type="primary"):
         st.error("Proszę wypełnić wszystkie pola formularza.")
     else:
         with st.spinner(f"Analizuję wniosek ({selected_model})..."):
-            # Construct the Prompt - JSON OUTPUT FORMAT
-            prompt = f"""Jesteś surowym i precyzyjnym ekspertem oceniającym wnioski grantowe. Twoim zadaniem jest ocena projektu na podstawie dostarczonych danych pod kątem dwóch kryteriów krytycznych.
+            # Construct the Prompt - MARKER-BASED FORMAT
+            prompt = f"""Jesteś surowym i precyzyjnym ekspertem oceniającym wnioski grantowe.
 
 DANE WEJŚCIOWE:
 1. PROFIL INSTYTUTU:
@@ -84,35 +81,31 @@ KRYTERIA OCENY:
 1. DOPASOWANIE DO PROFILU: Czy projekt mieści się w obszarze badawczym i kompetencyjnym instytutu?
 2. KOMERCJALIZACJA: Czy wyniki prowadzą do rynkowej komercjalizacji (sprzedaż, licencja), a nie tylko "wdrożenia własnego"?
 
-ODPOWIEDZ W FORMACIE JSON (i TYLKO JSON, bez żadnego innego tekstu):
-{{
-  "analiza_profilu": "Twoja analiza zgodności z profilem instytutu...",
-  "analiza_komercjalizacji": "Twoja analiza potencjału komercjalizacyjnego...",
-  "werdykt": "GO",
-  "uzasadnienie": "Krótkie uzasadnienie decyzji..."
-}}
+WYMAGANY FORMAT ODPOWIEDZI:
 
-WAŻNE:
-- Pole "werdykt" MUSI zawierać DOKŁADNIE jedno z dwóch słów: "GO" lub "NO-GO" (wielkimi literami, bez innych znaków).
-- Odpowiedz TYLKO poprawnym JSON-em, bez żadnych dodatkowych komentarzy przed ani po.
+### 1. Analiza Zgodności z Profilem
+(Twoja analiza...)
 
-Przykład poprawnej odpowiedzi dla projektu który NIE pasuje:
-{{
-  "analiza_profilu": "Projekt dotyczy rolnictwa, co nie jest w profilu instytutu IT.",
-  "analiza_komercjalizacji": "Brak planu sprzedaży, tylko wdrożenie wewnętrzne.",
-  "werdykt": "NO-GO",
-  "uzasadnienie": "Projekt nie pasuje do profilu i nie ma potencjału komercyjnego."
-}}
+### 2. Analiza Potencjału Komercjalizacyjnego
+(Twoja analiza...)
+
+### UZASADNIENIE
+(Krótkie uzasadnienie decyzji...)
+
+NA SAMYM KOŃCU ODPOWIEDZI MUSISZ UMIEŚCIĆ DOKŁADNIE JEDEN Z PONIŻSZYCH ZNACZNIKÓW (skopiuj go dokładnie):
+<<<WERDYKT: GO>>>
+lub
+<<<WERDYKT: NO-GO>>>
+
+WAŻNE: Znacznik musi być ostatnią linią odpowiedzi, dokładnie w tym formacie z trzema nawiasami ostrymi.
 """
             
-            # Send to Ollama with JSON format hint
             payload = {
                 "model": selected_model,
                 "prompt": prompt,
                 "stream": False,
-                "format": "json",  # Ollama hint for JSON output
                 "options": {
-                    "temperature": 0.1,
+                    "temperature": 0.2,
                     "num_ctx": 4096
                 }
             }
@@ -122,42 +115,20 @@ Przykład poprawnej odpowiedzi dla projektu który NIE pasuje:
                 if response.status_code == 200:
                     result_text = response.json().get('response', '')
                     
-                    # Try to parse JSON response
-                    try:
-                        result_json = json.loads(result_text)
-                        
-                        # Display Results
-                        st.markdown("---")
-                        st.subheader("Wynik Analizy AI")
-                        
-                        st.markdown("### 1. Analiza Zgodności z Profilem")
-                        st.markdown(result_json.get("analiza_profilu", "Brak danych"))
-                        
-                        st.markdown("### 2. Analiza Potencjału Komercjalizacyjnego")
-                        st.markdown(result_json.get("analiza_komercjalizacji", "Brak danych"))
-                        
-                        st.markdown("### WERDYKT KOŃCOWY")
-                        verdict = result_json.get("werdykt", "").strip().upper()
-                        
-                        st.markdown("### UZASADNIENIE")
-                        st.markdown(result_json.get("uzasadnienie", "Brak uzasadnienia"))
-                        
-                        # Visual feedback based on EXACT verdict value
-                        if verdict == "NO-GO":
-                            st.error("WERDYKT: NO-GO 🛑")
-                        elif verdict == "GO":
-                            st.success("WERDYKT: GO ✅")
-                        else:
-                            st.warning(f"⚠️ Nieoczekiwany werdykt: '{verdict}' (oczekiwano 'GO' lub 'NO-GO')")
-                            
-                    except json.JSONDecodeError:
-                        # Fallback: display raw text if JSON parsing fails
-                        st.warning("⚠️ Model nie zwrócił poprawnego JSON. Wyświetlam surową odpowiedź:")
-                        st.markdown(result_text)
-                        st.error("Nie udało się automatycznie wykryć werdyktu.")
+                    # Display Results
+                    st.markdown("---")
+                    st.subheader("Wynik Analizy AI")
+                    st.markdown(result_text)
+                    
+                    # Extract verdict from marker - check NO-GO first (more specific)
+                    if "<<<WERDYKT: NO-GO>>>" in result_text:
+                        st.error("WERDYKT: NO-GO 🛑")
+                    elif "<<<WERDYKT: GO>>>" in result_text:
+                        st.success("WERDYKT: GO ✅")
+                    else:
+                        st.warning("⚠️ Nie znaleziono znacznika werdyktu. Sprawdź tekst analizy.")
                     
                 else:
                     st.error(f"Błąd komunikacji z modelem: {response.text}")
             except Exception as e:
                 st.error(f"Wystąpił błąd: {e}")
-
