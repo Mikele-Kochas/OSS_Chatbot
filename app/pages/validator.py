@@ -1,0 +1,104 @@
+import streamlit as st
+import requests
+import json
+
+st.set_page_config(page_title="Walidator Wniosków", page_icon="📋", layout="wide")
+
+OLLAMA_HOST = "http://ollama:11434"
+MODEL = "gpt-oss:120b"
+
+st.title("📋 Walidator Wniosków Grantowych")
+st.markdown("Narzędzie do wstępnej oceny zgodności projektu z profilem instytutu oraz potencjałem komercjalizacyjnym.")
+
+# --- INPUT FORM ---
+with st.container():
+    c1, c2 = st.columns([1, 1])
+    
+    with c1:
+        st.subheader("1. Profil Instytutu")
+        institute_profile = st.text_area(
+            "Opisz profil działalności badawczej i kompetencje instytutu:",
+            height=300,
+            placeholder="Np. Instytut specjalizuje się w badaniach nad sztuczną inteligencją, uczeniem maszynowym oraz ich zastosowaniem w medycynie..."
+        )
+
+    with c2:
+        st.subheader("2. Dane Projektu")
+        project_goal = st.text_area("Cel projektu (krótki opis):", height=100)
+        innovations = st.text_area("Główne funkcjonalności / Cechy innowacyjne:", height=100, help="Elementy innowacyjne lub znacząco ulepszone w stosunku do rynku.")
+        results = st.text_area("Rezultaty:", height=100, help="Mierzalne efekty, w tym komercjalizacja.")
+
+# --- VALIDATION LOGIC ---
+if st.button("Sprawdź Wniosek (GO / NO-GO)", type="primary"):
+    if not all([institute_profile, project_goal, innovations, results]):
+        st.error("Proszę wypełnić wszystkie pola formularza.")
+    else:
+        with st.spinner("Analizuję wniosek (model 120B)..."):
+            # Construct the Prompt
+            prompt = f"""
+Jesteś surowym i precyzyjnym ekspertem oceniającym wnioski grantowe. Twoim zadaniem jest ocena projektu na podstawie dostarczonych danych pod kątem dwóch kryteriów krytycznych.
+
+DANE WEJŚCIOWE:
+1. PROFIL INSTYTUTU:
+{institute_profile}
+
+2. CEL PROJEKTU:
+{project_goal}
+
+3. INNOWACJE:
+{innovations}
+
+4. REZULTATY:
+{results}
+
+KRYTERIA OCENY:
+1. DOPASOWANIE DO PROFILU: Czy projekt mieści się w obszarze badawczym i kompetencyjnym instytutu? Jeśli projekt pasowałby lepiej do innego typu instytutu, należy to wypunktować.
+2. KOMERCJALIZACJA: Czy wyniki prowadzą do rynkowej komercjalizacji (sprzedaż, licencja), czy jest to tylko "wdrożenie własne" lub realizacja potrzeb wewnętrznych (co jest błędem)? Projekt musi mieć potencjał rynkowy.
+
+WYMAGANY FORMAT ODPOWIEDZI:
+Analizę przedstaw w punktach, a na końcu wydaj jednoznaczną opinię.
+
+### 1. Analiza Zgodności z Profilem
+(Twoja analiza...)
+
+### 2. Analiza Potencjału Komercjalizacyjnego
+(Twoja analiza - zwróć uwagę czy to nie jest wdrożenie wewnętrzne...)
+
+### WERDYKT KOŃCOWY
+**[GO / NO-GO]**
+
+### UZASADNIENIE
+(Krótkie, żołnierskie uzasadnienie decyzji. Jeśli NO-GO, napisz dlaczego.)
+"""
+            
+            # Send to Ollama
+            payload = {
+                "model": MODEL,
+                "prompt": prompt,
+                "stream": False,
+                "options": {
+                    "temperature": 0.2, # Low temperature for consistent, strict evaluation
+                    "num_ctx": 4096
+                }
+            }
+            
+            try:
+                response = requests.post(f"{OLLAMA_HOST}/api/generate", json=payload)
+                if response.status_code == 200:
+                    result_text = response.json().get('response', '')
+                    
+                    # Display Results
+                    st.markdown("---")
+                    st.subheader("Wynik Analizy AI")
+                    st.markdown(result_text)
+                    
+                    # Visual feedback based on verdict
+                    if "NO-GO" in result_text.upper():
+                        st.error("WERDYKT: NO-GO 🛑")
+                    elif "GO" in result_text.upper():
+                        st.success("WERDYKT: GO ✅")
+                    
+                else:
+                    st.error(f"Błąd komunikacji z modelem: {response.text}")
+            except Exception as e:
+                st.error(f"Wystąpił błąd: {e}")
