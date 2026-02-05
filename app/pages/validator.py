@@ -123,11 +123,20 @@ Analizę przedstaw w punktach, a na końcu wydaj jednoznaczną opinię.
                     st.markdown(result_text)
                     
                     # Visual feedback based on verdict
-                    # Use Regex to find exact words, avoiding substrings like "GOSPODARKA" or "LOGO"
-                    # Handle "NO-GO", "NO GO", "NO_GO"
-                    if re.search(r'\bNO[- _]?GO\b', result_text, re.IGNORECASE):
+                    # CRITICAL: Only search for verdict in the WERDYKT section to avoid false positives
+                    # from Polish words containing "GO" like "DIALOG", "LOGO", "KATEGORIA"
+                    verdict_section = ""
+                    werdykt_match = re.search(r'WERDYKT[^\n]*\n([\s\S]{0,100})', result_text, re.IGNORECASE)
+                    if werdykt_match:
+                        verdict_section = werdykt_match.group(0)
+                    else:
+                        # Fallback: check last 200 characters
+                        verdict_section = result_text[-200:]
+                    
+                    # Now search for verdict ONLY in the extracted section
+                    if re.search(r'NO[- _]?GO', verdict_section, re.IGNORECASE):
                         st.error("WERDYKT: NO-GO 🛑")
-                    elif re.search(r'\bGO\b', result_text, re.IGNORECASE):
+                    elif re.search(r'\*\*GO\*\*|\bGO\b', verdict_section, re.IGNORECASE):
                         st.success("WERDYKT: GO ✅")
                     else:
                         st.warning("⚠️ Nie udało się automatycznie wykryć werdyktu (sprawdź tekst analizy).")

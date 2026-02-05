@@ -17,7 +17,7 @@
             "1–2 zgłoszenia patentowe lub know-how chronione",
             "Dokumentacja techniczna produktu"
         ],
-        "werdykt": "poprawna"
+        "werdykt": "go"
     },
     {
         "id_pliku": "Fiszka nr.11",
@@ -37,7 +37,7 @@
             "Redukcja emisji CO2 (eliminacja transportu na długie odległości)",
             "Zwiększenie dostępności świeżych produktów w miastach przez cały rok"
         ],
-        "werdykt": "niepoprawna"
+        "werdykt": "no-go"
     },
     {
         "id_pliku": "Fiszka nr.8",
@@ -53,7 +53,7 @@
             "Zmniejszenie uzależnienia od chemicznych nawozów i pestycydów w uprawach",
             "Zwiększenie efektywności i jakości plonów w systemie agroekologicznym"
         ],
-        "werdykt": "niepoprawna"
+        "werdykt": "no-go"
     },
     {
         "id_pliku": "Fiszka nr.9",
@@ -73,7 +73,7 @@
             "Zoptymalizowanie czasów reakcji na cyberzagrożenia (z 10 min do <3 min)",
             "Zwiększenie ogólnego poziomu bezpieczeństwa systemów informacyjnych"
         ],
-        "werdykt": "poprawna"
+        "werdykt": "go"
     },
     {
         "id_pliku": "Fiszka nr.12",
@@ -93,7 +93,7 @@
             "Zwiększona dostępność energii odnawialnej w godzinach szczytu",
             "Zmniejszenie wpływu technologii na środowisko"
         ],
-        "werdykt": "niepoprawna"
+        "werdykt": "no-go"
     },
     {
         "id_pliku": "Fiszka nr.7",
@@ -110,7 +110,7 @@
             "System sztucznej inteligencji do monitorowania i optymalizacji procesów hodowli",
             "Wytworzenie alternatywnego mięsa przy użyciu biotechnologii"
         ],
-        "werdykt": "niepoprawna"
+        "werdykt": "no-go"
     },
     {
         "id_pliku": "Fiszka nr.5",
@@ -127,7 +127,7 @@
             "Zwiększenie wydajności upraw tropikalnych w krajach o chłodniejszym klimacie",
             "Zmniejszenie kosztów transportu roślin tropikalnych z innych regionów świata"
         ],
-        "werdykt": "niepoprawna"
+        "werdykt": "no-go"
     },
     {
         "id_pliku": "Fiszka nr.6",
@@ -143,7 +143,7 @@
             "Ograniczenie zależności od zewnętrznych źródeł wody",
             "Wzrost wydajności upraw bez użycia sztucznych nawozów i środków chemicznych"
         ],
-        "werdykt": "niepoprawna"
+        "werdykt": "no-go"
     },
     {
         "id_pliku": "Fiszka nr.4",
@@ -163,7 +163,7 @@
             "Chronione know-how / zgłoszenie patentowe",
             "Produkt gotowy do wdrożenia rynkowego"
         ],
-        "werdykt": "poprawna"
+        "werdykt": "go"
     },
     {
         "id_pliku": "Fiszka nr.2",
@@ -182,7 +182,7 @@
             "Zwiększenie wykrywalności podatności wysokiego ryzyka o min. 25%",
             "Zgłoszenie patentowe lub chronione know-how"
         ],
-        "werdykt": "poprawna"
+        "werdykt": "go"
     },
     {
         "id_pliku": "Fiszka nr.3",
@@ -202,7 +202,7 @@
             "Chronione know-how / zgłoszenie patentowe",
             "Dokumentacja produktu komercyjnego"
         ],
-        "werdykt": "poprawna"
+        "werdykt": "go"
     },
     {
         "id_pliku": "Fiszka nr.10",
@@ -222,6 +222,6 @@
             "Testowanie systemu w kilku szpitalach partnerskich i uzyskanie opinii medycznych",
             "Opracowanie szczegółowej dokumentacji oraz raportu z wynikami badań klinicznych"
         ],
-        "werdykt": "poprawna"
+        "werdykt": "go"
     }
 ]

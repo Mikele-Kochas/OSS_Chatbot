@@ -46,7 +46,12 @@ if start_btn and uploaded_file:
             goal = item.get("cel_projektu", "")
             innovations = "\n".join(item.get("glowne_funkcjonalnosci", [])) if isinstance(item.get("glowne_funkcjonalnosci"), list) else item.get("glowne_funkcjonalnosci", "")
             results_field = "\n".join(item.get("rezultaty", [])) if isinstance(item.get("rezultaty"), list) else item.get("rezultaty", "")
-            ground_truth = item.get("werdykt", "").upper() # GO / NO-GO
+            # Normalize ground truth: "go" -> "GO", "no-go" -> "NO-GO"
+            raw_gt = item.get("werdykt", "").upper().replace(" ", "-")
+            if "NO" in raw_gt:
+                ground_truth = "NO-GO"
+            else:
+                ground_truth = "GO"
             
             row = {
                 "ID": doc_id,
@@ -109,18 +114,24 @@ Analizę przedstaw w punktach, a na końcu wydaj jednoznaczną opinię.
                     if resp.status_code == 200:
                         full_text = resp.json().get('response', '')
                         
-                        # Parse Verdict
+                        # Parse Verdict - ONLY from WERDYKT section
+                        verdict_section = ""
+                        werdykt_match = re.search(r'WERDYKT[^\n]*\n([\s\S]{0,100})', full_text, re.IGNORECASE)
+                        if werdykt_match:
+                            verdict_section = werdykt_match.group(0)
+                        else:
+                            verdict_section = full_text[-200:] # Fallback
+                        
                         verdict = "UNCERTAIN"
-                        if re.search(r'\bNO[- _]?GO\b', full_text, re.IGNORECASE):
+                        if re.search(r'NO[- _]?GO', verdict_section, re.IGNORECASE):
                             verdict = "NO-GO"
-                        elif re.search(r'\bGO\b', full_text, re.IGNORECASE):
+                        elif re.search(r'\*\*GO\*\*|\bGO\b', verdict_section, re.IGNORECASE):
                             verdict = "GO"
                         
                         row[f"{model} Verdict"] = verdict
                         row[f"{model} Time"] = round(end_ts - start_ts, 2)
                         
                         # Check Match
-                        # Simple normalization: treat "GO" and "go" as same. NO-GO vs no-go same.
                         is_correct = (verdict == ground_truth)
                         row[f"{model} Correct"] = is_correct
                         
