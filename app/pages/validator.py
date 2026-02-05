@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import json
+import re
 
 st.set_page_config(page_title="Walidator Wniosków", page_icon="📋", layout="wide")
 
@@ -122,10 +123,14 @@ Analizę przedstaw w punktach, a na końcu wydaj jednoznaczną opinię.
                     st.markdown(result_text)
                     
                     # Visual feedback based on verdict
-                    if "NO-GO" in result_text.upper():
+                    # Use Regex to find exact words, avoiding substrings like "GOSPODARKA" or "LOGO"
+                    # Handle "NO-GO", "NO GO", "NO_GO"
+                    if re.search(r'\bNO[- _]?GO\b', result_text, re.IGNORECASE):
                         st.error("WERDYKT: NO-GO 🛑")
-                    elif "GO" in result_text.upper():
+                    elif re.search(r'\bGO\b', result_text, re.IGNORECASE):
                         st.success("WERDYKT: GO ✅")
+                    else:
+                        st.warning("⚠️ Nie udało się automatycznie wykryć werdyktu (sprawdź tekst analizy).")
                     
                 else:
                     st.error(f"Błąd komunikacji z modelem: {response.text}")
