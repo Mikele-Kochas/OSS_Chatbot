@@ -5,10 +5,39 @@ import json
 st.set_page_config(page_title="Walidator Wniosków", page_icon="📋", layout="wide")
 
 OLLAMA_HOST = "http://ollama:11434"
-MODEL = "gpt-oss:120b"
+DEFAULT_MODEL = "gpt-oss:120b"
+ALTERNATIVE_MODEL = "gpt-oss:20b"
 
 st.title("📋 Walidator Wniosków Grantowych")
 st.markdown("Narzędzie do wstępnej oceny zgodności projektu z profilem instytutu oraz potencjałem komercjalizacyjnym.")
+
+# Sidebar for settings
+with st.sidebar:
+    st.header("Settings")
+    try:
+        response = requests.get(f"{OLLAMA_HOST}/api/tags")
+        if response.status_code == 200:
+            models = [m['name'] for m in response.json().get('models', [])]
+            
+            # Ensure our target models are in the list
+            if DEFAULT_MODEL not in models:
+                 models.append(DEFAULT_MODEL)
+            if ALTERNATIVE_MODEL not in models:
+                 models.append(ALTERNATIVE_MODEL)
+            
+            # Sort to keep our preferred models at the top
+            models.sort(key=lambda x: (x != DEFAULT_MODEL, x != ALTERNATIVE_MODEL))
+            
+            selected_model = st.selectbox("Select Model", models)
+        else:
+            st.error("Could not fetch models from Ollama.")
+            selected_model = DEFAULT_MODEL
+    except Exception as e:
+        st.error(f"Connection error: {e}")
+        selected_model = DEFAULT_MODEL
+    
+    st.markdown("---")
+    st.markdown(f"- Active Model: `{selected_model}`")
 
 # --- INPUT FORM ---
 with st.container():
@@ -73,7 +102,7 @@ Analizę przedstaw w punktach, a na końcu wydaj jednoznaczną opinię.
             
             # Send to Ollama
             payload = {
-                "model": MODEL,
+                "model": selected_model,
                 "prompt": prompt,
                 "stream": False,
                 "options": {
