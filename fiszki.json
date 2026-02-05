@@ -1,0 +1,227 @@
+[
+    {
+        "id_pliku": "Fiszka nr.1",
+        "tytul_projektu": "Platforma AI do automatycznej detekcji anomalii i incydentów cyberbezpieczeństwa w systemach IT",
+        "cel_projektu": "Celem projektu jest opracowanie komercyjnej platformy AI do automatycznej detekcji anomalii, zagrożeń i incydentów cyberbezpieczeństwa w infrastrukturze IT, mającej na celu poprawę efektywności zarządzania bezpieczeństwem danych i systemów w organizacjach.",
+        "glowne_funkcjonalnosci": [
+            "Modele AI wykrywające nieznane (zero-day) anomalie bez sygnatur",
+            "Automatyczna korelacja zdarzeń z wielu źródeł (logi, sieć, endpointy)",
+            "Redukcja fałszywych alarmów (false positives) w porównaniu do klasycznych SIEM",
+            "Skalowalna architektura programistyczna (SaaS / on-prem)",
+            "Analiza FTO potwierdzająca możliwość komercyjnego wykorzystania algorytmów"
+        ],
+        "rezultaty": [
+            "Platforma software’owa gotowa do komercjalizacji (TRL 7)",
+            "Skuteczność detekcji incydentów ≥ 90% w testach pilotażowych",
+            "Redukcja false positives o min. 30%",
+            "1–2 zgłoszenia patentowe lub know-how chronione",
+            "Dokumentacja techniczna produktu"
+        ],
+        "werdykt": "poprawna"
+    },
+    {
+        "id_pliku": "Fiszka nr.11",
+        "tytul_projektu": "Innowacyjna uprawa roślin w zamkniętych systemach aeroponicznych",
+        "cel_projektu": "Projekt „AeroGrow” ma na celu opracowanie nowoczesnej technologii uprawy roślin w zamkniętych systemach aeroponicznych, umożliwiającej efektywną produkcję świeżej żywności w miastach, przy minimalnym zużyciu zasobów naturalnych. System znacząco redukuje zużycie wody i przestrzeni, a uprawy odbywają się w środowisku kontrolowanym.",
+        "glowne_funkcjonalnosci": [
+            "Zamknięte systemy aeroponiki (rośliny rosną w powietrzu, korzenie nawilżane mgłą)",
+            "Minimalne zużycie wody (ok. 90% mniej niż tradycyjne metody)",
+            "Kontrolowane środowisko uprawy (temperatura, wilgotność, światło)",
+            "Kompatybilność z miejskimi przestrzeniami (dachy, piwnice)",
+            "Szybki zwrot z inwestycji",
+            "Edukacja ekologiczna"
+        ],
+        "rezultaty": [
+            "Zwiększenie efektywności produkcji żywności w miastach (wzrost wydajności o min. 30%)",
+            "Oszczędność wody (możliwość recyklingu 90% wody)",
+            "Redukcja emisji CO2 (eliminacja transportu na długie odległości)",
+            "Zwiększenie dostępności świeżych produktów w miastach przez cały rok"
+        ],
+        "werdykt": "niepoprawna"
+    },
+    {
+        "id_pliku": "Fiszka nr.8",
+        "tytul_projektu": "Wprowadzenie innowacyjnej metody uprawy roślin w systemie agroekologicznym z zastosowaniem tradycyjnych metod naturalnych",
+        "cel_projektu": "Celem projektu jest opracowanie i wdrożenie nowej metody uprawy roślin w systemie agroekologicznym, wykorzystującej tradycyjne, naturalne techniki zarządzania glebą, nawożenie organiczne i rotację upraw w celu poprawy jakości gleby i zwiększenia bioróżnorodności.",
+        "glowne_funkcjonalnosci": [
+            "Zastosowanie naturalnych nawozów organicznych (kompost, obornik) bez chemii",
+            "Wykorzystanie metod mulczowania i rotacji upraw",
+            "Promowanie bioróżnorodności poprzez wprowadzenie różnych gatunków roślin i naturalnych środków ochrony"
+        ],
+        "rezultaty": [
+            "Poprawa jakości gleby i wzrostu bioróżnorodności na powierzchniach rolnych",
+            "Zmniejszenie uzależnienia od chemicznych nawozów i pestycydów w uprawach",
+            "Zwiększenie efektywności i jakości plonów w systemie agroekologicznym"
+        ],
+        "werdykt": "niepoprawna"
+    },
+    {
+        "id_pliku": "Fiszka nr.9",
+        "tytul_projektu": "Optymalizacja Algorytmów Wykrywania Cyberzagrożeń",
+        "cel_projektu": "Celem projektu jest opracowanie zaawansowanego systemu wykrywania i zapobiegania cyberzagrożeniom, wykorzystującego sztuczną inteligencję (deep learning) oraz nowoczesne algorytmy analizy danych do identyfikacji nowych, nieznanych zagrożeń w czasie rzeczywistym, minimalizacji fałszywych alarmów i adaptacji do zmieniających się technik ataków.",
+        "glowne_funkcjonalnosci": [
+            "Wykorzystanie algorytmów deep learning (RNN, CNN) do analizy danych sieciowych",
+            "Dynamiczna adaptacja do zmieniających się zagrożeń (reinforcement learning)",
+            "Wykrywanie zaawansowanych ataków APT (identyfikacja długoterminowych wzorców)",
+            "Redukcja fałszywych alarmów (analiza kontekstowa)",
+            "Kompleksowa analiza FTO"
+        ],
+        "rezultaty": [
+            "Zwiększenie skuteczności wykrywania ataków cybernetycznych o 30%",
+            "Implementacja modelu AI w przynajmniej trzech dużych organizacjach",
+            "Redukcja liczby fałszywych alarmów o 25%",
+            "Zoptymalizowanie czasów reakcji na cyberzagrożenia (z 10 min do <3 min)",
+            "Zwiększenie ogólnego poziomu bezpieczeństwa systemów informacyjnych"
+        ],
+        "werdykt": "poprawna"
+    },
+    {
+        "id_pliku": "Fiszka nr.12",
+        "tytul_projektu": "Opracowanie i wdrożenie innowacyjnej technologii magazynowania energii odnawialnej",
+        "cel_projektu": "Celem projektu jest opracowanie nowatorskiej technologii magazynowania energii z OZE, poprawiającej efektywność magazynowania i dystrybucji, wykorzystującej innowacyjne materiały oraz inteligentne systemy zarządzania, co pozwoli na integrację OZE z sieciami energetycznymi.",
+        "glowne_funkcjonalnosci": [
+            "Technologia magazynowania na bazie zaawansowanych materiałów (nanomateriały, superkondensatory)",
+            "Zwiększenie efektywności systemów o 25%",
+            "Inteligentne systemy zarządzania energią (dynamiczne dostosowywanie)",
+            "Zmniejszenie kosztów produkcji energii z OZE o 20%",
+            "Minimalizacja wpływu na środowisko (materiały ekologiczne)"
+        ],
+        "rezultaty": [
+            "Prototyp nowego systemu magazynowania energii",
+            "Zwiększenie efektywności magazynowania o 25%",
+            "Redukcja kosztów produkcji energii o 15%",
+            "Zwiększona dostępność energii odnawialnej w godzinach szczytu",
+            "Zmniejszenie wpływu technologii na środowisko"
+        ],
+        "werdykt": "niepoprawna"
+    },
+    {
+        "id_pliku": "Fiszka nr.7",
+        "tytul_projektu": "Opracowanie nowoczesnej technologii produkcji żywności przy wykorzystaniu bioreaktorów do hodowli mięsa z komórek",
+        "cel_projektu": "Celem projektu jest opracowanie nowoczesnej technologii hodowli mięsa z komórek, z zastosowaniem bioreaktorów, w celu dalszych badań nad optymalizacją procesu oraz zrozumienia podstawowych mechanizmów hodowli komórek.",
+        "glowne_funkcjonalnosci": [
+            "Badania nad optymalizacją warunków hodowli komórek w bioreaktorach",
+            "Zwiększenie efektywności hodowli komórek mięśniowych w laboratorium",
+            "Innowacyjne podejście do procesu hodowli komórek",
+            "Optymalizacja parametrów wzrostu komórek w kontrolowanych warunkach"
+        ],
+        "rezultaty": [
+            "Prototyp bioreaktora do hodowli komórek zwierzęcych",
+            "System sztucznej inteligencji do monitorowania i optymalizacji procesów hodowli",
+            "Wytworzenie alternatywnego mięsa przy użyciu biotechnologii"
+        ],
+        "werdykt": "niepoprawna"
+    },
+    {
+        "id_pliku": "Fiszka nr.5",
+        "tytul_projektu": "Sztuczna wyspa do hodowli roślin tropikalnych w klimacie umiarkowanym",
+        "cel_projektu": "Celem projektu jest stworzenie sztucznej wyspy, która umożliwi hodowlę roślin tropikalnych w klimacie umiarkowanym, z zastosowaniem technologii zmiany mikroklimatu oraz innowacyjnych rozwiązań w zakresie inżynierii rolniczej.",
+        "glowne_funkcjonalnosci": [
+            "Budowa sztucznej wyspy z naturalnym ekosystemem tropikalnym",
+            "Zastosowanie technologii do kontrolowania mikroklimatu i nawadniania",
+            "Użycie materiałów odpornych na zmiany klimatyczne i trudne warunki atmosferyczne",
+            "Innowacyjne rozwiązania w zakresie upraw roślin tropikalnych w środowisku umiarkowanym"
+        ],
+        "rezultaty": [
+            "Stworzenie prototypu sztucznej wyspy zdolnej do wspierania hodowli roślin tropikalnych",
+            "Zwiększenie wydajności upraw tropikalnych w krajach o chłodniejszym klimacie",
+            "Zmniejszenie kosztów transportu roślin tropikalnych z innych regionów świata"
+        ],
+        "werdykt": "niepoprawna"
+    },
+    {
+        "id_pliku": "Fiszka nr.6",
+        "tytul_projektu": "Zielony Zakątek – Innowacyjny System Organicznego Nawadniania Roślin",
+        "cel_projektu": "Celem projektu jest opracowanie systemu nawadniania opartego na naturalnych zasobach wody deszczowej, dostosowanego do upraw ekologicznych, mającego na celu minimalizację użycia wody i ograniczenie negatywnego wpływu na środowisko.",
+        "glowne_funkcjonalnosci": [
+            "Wykorzystanie naturalnych procesów do zbierania wody deszczowej",
+            "Całkowicie mechaniczny system nawadniania roślin",
+            "Brak użycia nowoczesnych technologii IT, sztucznej inteligencji czy monitorowania zdalnego"
+        ],
+        "rezultaty": [
+            "Zmniejszenie zużycia wody w rolnictwie ekologicznym",
+            "Ograniczenie zależności od zewnętrznych źródeł wody",
+            "Wzrost wydajności upraw bez użycia sztucznych nawozów i środków chemicznych"
+        ],
+        "werdykt": "niepoprawna"
+    },
+    {
+        "id_pliku": "Fiszka nr.4",
+        "tytul_projektu": "System AI do predykcyjnej analizy popytu i optymalizacji decyzji biznesowych",
+        "cel_projektu": "Celem projektu jest opracowanie komercyjnego systemu AI do prognozowania popytu oraz wspomagania decyzji biznesowych, który umożliwi przedsiębiorstwom optymalizację procesów planowania i zarządzania zasobami poprzez zaawansowane algorytmy analizy danych.",
+        "glowne_funkcjonalnosci": [
+            "Modele predykcyjne AI adaptujące się do zmiennych warunków rynkowych",
+            "Automatyczne uwzględnianie sezonowości i zdarzeń losowych",
+            "Możliwość uczenia modeli na danych klienta bez ujawniania danych (federated learning)",
+            "Przewaga nad klasycznymi narzędziami statystycznymi",
+            "Analiza FTO potwierdzająca możliwość komercjalizacji"
+        ],
+        "rezultaty": [
+            "Gotowy system AI (TRL 7)",
+            "Poprawa dokładności prognoz popytu o min. 20%",
+            "Skrócenie czasu podejmowania decyzji biznesowych o min. 30%",
+            "Chronione know-how / zgłoszenie patentowe",
+            "Produkt gotowy do wdrożenia rynkowego"
+        ],
+        "werdykt": "poprawna"
+    },
+    {
+        "id_pliku": "Fiszka nr.2",
+        "tytul_projektu": "System AI do automatycznej analizy podatności i oceny ryzyka bezpieczeństwa aplikacji webowych",
+        "cel_projektu": "Celem projektu jest opracowanie komercyjnego narzędzia informatycznego wykorzystującego AI do automatycznej analizy podatności aplikacji webowych oraz oceny poziomu ryzyka cyberbezpieczeństwa, umożliwiającego szybsze wykrywanie zagrożeń i adaptację do nowych typów ataków.",
+        "glowne_funkcjonalnosci": [
+            "Automatyczna analiza kodu i konfiguracji aplikacji webowych z użyciem AI",
+            "Identyfikacja podatności logicznych, a nie tylko znanych sygnatur",
+            "Dynamiczna ocena ryzyka w kontekście środowiska klienta",
+            "Integracja z procesami DevSecOps",
+            "Analiza FTO potwierdzająca możliwość komercjalnego wykorzystania"
+        ],
+        "rezultaty": [
+            "Oprogramowanie do analizy podatności (TRL 7)",
+            "Skrócenie czasu analizy bezpieczeństwa aplikacji o min. 50%",
+            "Zwiększenie wykrywalności podatności wysokiego ryzyka o min. 25%",
+            "Zgłoszenie patentowe lub chronione know-how"
+        ],
+        "werdykt": "poprawna"
+    },
+    {
+        "id_pliku": "Fiszka nr.3",
+        "tytul_projektu": "Platforma AI do automatycznego przetwarzania i klasyfikacji dokumentów tekstowych dla sektora publicznego i biznesu",
+        "cel_projektu": "Celem projektu jest opracowanie platformy informatycznej wykorzystującej sztuczną inteligencję do automatycznego rozpoznawania, klasyfikacji i ekstrakcji danych z dokumentów tekstowych, umożliwiającej efektywne przetwarzanie dużych zbiorów informacji w różnych formatach. Platforma będzie wspierać organizacje w automatyzacji procesów związanych z analizą dokumentów i zarządzaniem danymi.",
+        "glowne_funkcjonalnosci": [
+            "Algorytmy NLP do automatycznej klasyfikacji dokumentów",
+            "Ekstrakcja danych z dokumentów nieustrukturyzowanych",
+            "Uczenie modeli na danych klienta bez konieczności ręcznej konfiguracji",
+            "Moduł adaptacyjny dostosowujący modele do specyfiki branży",
+            "Analiza FTO potwierdzająca możliwość komercyjnego wykorzystania technologii"
+        ],
+        "rezultaty": [
+            "Platforma software’owa gotowa do sprzedaży (TRL 7)",
+            "Skrócenie czasu obsługi dokumentów o min. 60%",
+            "Dokładność klasyfikacji dokumentów ≥ 90%",
+            "Chronione know-how / zgłoszenie patentowe",
+            "Dokumentacja produktu komercyjnego"
+        ],
+        "werdykt": "poprawna"
+    },
+    {
+        "id_pliku": "Fiszka nr.10",
+        "tytul_projektu": "Inteligentny system wspomagania diagnozy w medycynie obrazowej z wykorzystaniem sztucznej inteligencji",
+        "cel_projektu": "Celem projektu jest stworzenie systemu sztucznej inteligencji wspomagającego lekarzy w diagnozowaniu chorób na podstawie obrazów medycznych, takich jak zdjęcia rentgenowskie, tomografie komputerowe czy MRI. System wykorzysta algorytmy głębokiego uczenia oraz sieci neuronowe do analizy obrazów pod kątem wykrywania zmian patologicznych. Projekt zakłada również ciągłe doskonalenie algorytmów poprzez uczenie maszynowe na nowych danych medycznych.",
+        "glowne_funkcjonalnosci": [
+            "Zastosowanie najnowszych algorytmów głębokiego uczenia do analizy obrazów medycznych",
+            "Integracja z istniejącymi platformami medycznymi (EMR/EHR)",
+            "Uczenie się na nowych danych i ciągłe doskonalenie wyników diagnostycznych",
+            "Wykrywanie subtelnych zmian w obrazach, trudnych do zauważenia przez ludzkie oko",
+            "Zgodność z regulacjami prawnymi dotyczącymi ochrony danych pacjentów"
+        ],
+        "rezultaty": [
+            "Opracowanie prototypu systemu wspomagania diagnozy medycznej",
+            "Zwiększenie dokładności diagnozy o co najmniej 15%",
+            "Przyspieszenie procesu diagnostycznego o 30%",
+            "Testowanie systemu w kilku szpitalach partnerskich i uzyskanie opinii medycznych",
+            "Opracowanie szczegółowej dokumentacji oraz raportu z wynikami badań klinicznych"
+        ],
+        "werdykt": "poprawna"
+    }
+]
