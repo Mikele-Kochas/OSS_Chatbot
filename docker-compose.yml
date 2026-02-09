@@ -35,7 +35,7 @@ services:
   api:
     build: ./app
     container_name: grant-api
-    entrypoint: ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    entrypoint: ["python", "-m", "uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
     expose:
       - "8000"
     ports:
