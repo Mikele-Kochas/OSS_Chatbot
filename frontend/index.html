@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audytor Wniosków Grantowych AI</title>
+    <title>Audytor Wniosków AI</title>
     <style>
-        /* Professional Auditor Design - Premium Minimal */
-
+        /* Professional Auditor Design - Compact Single Page */
         * {
             margin: 0;
             padding: 0;
@@ -14,163 +14,117 @@
         }
 
         :root {
-            /* Color Palette */
-            --bg-primary: #f8f9fa;
+            --bg-primary: #f4f5f7;
             --bg-secondary: #ffffff;
             --text-primary: #1a1a1a;
-            --text-secondary: #4a4a4a;
-            --text-tertiary: #888888;
-
-            --accent-primary: #00ff00;
-            --accent-dark: #00cc00;
-            --accent-light: rgba(0, 255, 0, 0.1);
-            
-            --result-success: #e6fffa;
-            --result-success-text: #004d40;
-            --result-error: #fff5f5;
-            --result-error-text: #c53030;
-
-            --border-color: #dee2e6;
+            --text-secondary: #5e6c84;
+            --accent-primary: #00bf72;
+            /* Slightly darker green for professional look */
+            --accent-hover: #00a865;
+            --border-color: #dfe1e6;
             --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-
-            /* Spacing */
-            --spacing-xs: 0.5rem;
-            --spacing-sm: 1rem;
-            --spacing-md: 1.5rem;
-            --spacing-lg: 2rem;
-            --spacing-xl: 4rem;
-
-            /* Layout */
-            --radius: 2px;
+            --header-height: 60px;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-primary);
             color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden;
+            /* Prevent body scroll */
             display: flex;
             flex-direction: column;
         }
 
-        .container {
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: var(--spacing-xl) var(--spacing-md);
-            flex: 1;
-            width: 100%;
-        }
-
-        /* Header */
-        .header {
-            margin-bottom: var(--spacing-xl);
-            border-left: 6px solid var(--accent-primary);
-            padding-left: var(--spacing-md);
-        }
-
-        .header-title {
-            font-size: 2.2rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            text-transform: uppercase;
-        }
-
-        .header-subtitle {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-
-        .header-line {
-            width: 100px;
-            height: 4px;
-            background: var(--accent-primary);
-            margin-top: var(--spacing-sm);
-        }
-
-        /* Main Layout Grid */
-        .main-layout {
-            display: grid;
-            grid-template-columns: 350px 1fr;
-            gap: var(--spacing-xl);
-            align-items: start;
-        }
-
-        /* Sidebar - Context Info */
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md);
-        }
-
-        .info-card {
+        /* Compact Header */
+        header {
+            height: var(--header-height);
             background: var(--bg-secondary);
-            padding: var(--spacing-md);
-            border: 1px solid var(--border-color);
-            border-top: 3px solid var(--accent-primary);
+            border-bottom: 2px solid var(--accent-primary);
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
             box-shadow: var(--shadow-sm);
+            justify-content: space-between;
         }
 
-        .card-title {
-            font-size: 0.9rem;
-            font-weight: 700;
+        .brand {
+            font-size: 1.25rem;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: var(--spacing-sm);
-            color: var(--text-primary);
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .info-text {
-            font-size: 0.85rem;
+        .brand span {
+            color: var(--accent-primary);
+        }
+
+        .status {
+            font-size: 0.8rem;
+            font-weight: 600;
             color: var(--text-secondary);
-            margin-bottom: var(--spacing-sm);
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .model-badge {
-            display: inline-block;
-            background: var(--text-primary);
-            color: #fff;
-            padding: 4px 8px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            border-radius: var(--radius);
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-primary);
+            border-radius: 50%;
+            box-shadow: 0 0 4px var(--accent-primary);
         }
 
-        /* Content Area - Form */
-        .content-area {
+        /* Main Container - Full Height Grid */
+        .main-container {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 450px 1fr;
+            /* Fixed width form, flexible results */
+            gap: 0;
+            height: calc(100vh - var(--header-height));
+            overflow: hidden;
+        }
+
+        /* Left Pane: Form */
+        .form-pane {
             background: var(--bg-secondary);
-            padding: var(--spacing-lg);
-            border: 1px solid var(--border-color);
-            border-left: 6px solid var(--accent-primary);
-            box-shadow: var(--shadow-md);
+            border-right: 1px solid var(--border-color);
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
 
         .form-group {
-            margin-bottom: var(--spacing-md);
+            margin-bottom: 1rem;
         }
 
         .form-label {
-            display: block;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             font-weight: 700;
-            margin-bottom: 8px;
             text-transform: uppercase;
             color: var(--text-secondary);
+            margin-bottom: 4px;
+            display: block;
         }
 
         .form-control {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
+            font-size: 0.9rem;
             font-family: inherit;
-            font-size: 0.95rem;
             border: 1px solid var(--border-color);
-            background: var(--bg-primary);
-            min-height: 100px;
+            border-radius: 4px;
+            background: #fafbfc;
             resize: vertical;
+            min-height: 80px;
             transition: all 0.2s;
         }
 
@@ -178,235 +132,265 @@
             outline: none;
             border-color: var(--accent-primary);
             background: #fff;
-            box-shadow: 0 0 0 3px var(--accent-light);
+            box-shadow: 0 0 0 2px rgba(0, 191, 114, 0.2);
         }
 
-        /* Submit Button */
-        .submit-container {
-            text-align: right;
-            margin-top: var(--spacing-lg);
+        /* Make profile larger */
+        #profile {
+            min-height: 120px;
+        }
+
+        .action-area {
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
         }
 
         .submit-btn {
+            width: 100%;
+            padding: 12px;
             background: var(--text-primary);
             color: #fff;
             border: none;
-            padding: var(--spacing-sm) var(--spacing-lg);
-            font-size: 0.9rem;
+            border-radius: 4px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            border-bottom: 3px solid var(--accent-primary);
+            transition: background 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
         }
 
         .submit-btn:hover {
             background: var(--accent-primary);
-            color: var(--text-primary);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .submit-btn:disabled {
-            opacity: 0.7;
+            background: var(--text-secondary);
             cursor: not-allowed;
-            border-bottom-color: #999;
+            opacity: 0.7;
         }
 
-        /* Loading Spinner */
-        .loader {
+        /* Right Pane: Results */
+        .results-pane {
+            padding: 2rem;
+            background: var(--bg-primary);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /* Center placeholder */
+        }
+
+        /* Placeholder State */
+        .empty-state {
+            text-align: center;
+            color: var(--text-secondary);
+            max-width: 400px;
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--border-color);
+        }
+
+        /* Active Result State */
+        .result-card {
             display: none;
-            width: 24px;
-            height: 24px;
-            border: 3px solid #fff;
-            border-bottom-color: transparent;
-            border-radius: 50%;
-            animation: rotation 1s linear infinite;
-            margin-left: 10px;
-            vertical-align: middle;
-        }
-
-        @keyframes rotation {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Results Section */
-        .results-section {
-            margin-top: var(--spacing-xl);
-            display: none; /* Hidden by default */
-            animation: fadeIn 0.6s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            /* Hidden initially */
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+            width: 100%;
+            max-width: 900px;
+            /* Readable width */
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         .result-header {
-            background: var(--text-primary);
-            color: #fff;
-            padding: var(--spacing-sm) var(--spacing-md);
-            border-left: 4px solid var(--accent-primary);
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        .result-title {
-            font-size: 0.9rem;
-            font-weight: 700;
-            text-transform: uppercase;
+            background: #fff;
         }
 
         .verdict-badge {
-            padding: 4px 12px;
+            font-size: 1.1rem;
             font-weight: 800;
+            padding: 6px 16px;
+            border-radius: 4px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            background: #fff;
-            color: var(--text-primary);
         }
 
+        .card-body {
+            padding: 2rem;
+            overflow-y: auto;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Markdown styling inside results */
+        .card-body h3 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 6px;
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        .card-body h3:first-child {
+            margin-top: 0;
+        }
+
+        .card-body p {
+            margin-bottom: 1rem;
+        }
+
+        /* Utilities */
         .verdict-go {
-            background: var(--accent-primary);
-            color: var(--text-primary);
+            background: #e3fcef;
+            color: #006644;
+            border: 1px solid #badbcc;
         }
 
         .verdict-no-go {
-            background: #ff4444;
-            color: #fff;
+            background: #ffebe6;
+            color: #de350b;
+            border: 1px solid #ffbdad;
         }
 
-        .result-content {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            padding: var(--spacing-md);
-            box-shadow: var(--shadow-md);
+        .loader {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #fff;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            animation: rotation 1s linear infinite;
+            display: none;
         }
 
-        .markdown-body h3 {
-            margin-top: var(--spacing-md);
-            margin-bottom: var(--spacing-xs);
-            font-size: 1.1rem;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 4px;
-        }
-
-        .markdown-body p {
-            margin-bottom: var(--spacing-sm);
-        }
-
-        /* Responsive */
-        @media (max-width: 900px) {
-            .main-layout {
-                grid-template-columns: 1fr;
+        @keyframes rotation {
+            0% {
+                transform: rotate(0deg);
             }
-            .sidebar {
-                order: 2;
+
+            100% {
+                transform: rotate(360deg);
             }
-            .content-area {
-                order: 1;
-            }
+        }
+
+        /* Show/Hide logic */
+        .results-pane:not(.has-results) .result-card {
+            display: none;
+        }
+
+        .results-pane.has-results .empty-state {
+            display: none;
+        }
+
+        .results-pane.has-results .result-card {
+            display: flex;
         }
     </style>
 </head>
+
 <body>
 
-    <div class="container">
-        
-        <!-- Header -->
-        <header class="header">
-            <h1 class="header-title">Audytor Wniosków</h1>
-            <p class="header-subtitle">System automatycznej walidacji grantów (AI Powered)</p>
-            <div class="header-line"></div>
-        </header>
+    <header>
+        <div class="brand">
+            <span>///</span> Audytor Wniosków
+        </div>
+        <div class="status">
+            System Online <div class="status-dot"></div>
+        </div>
+    </header>
 
-        <div class="main-layout">
-            
-            <!-- Sidebar -->
-            <aside class="sidebar">
-                <div class="info-card">
-                    <h3 class="card-title">STATUS SYSTEMU</h3>
-                    <div class="info-text">
-                        <p><strong>Silnik AI:</strong> Ollama</p>
-                        <p><strong>Model:</strong> <span class="model-badge">gpt-oss:120b</span></p>
-                        <p><strong>API Endpoint:</strong> /validate</p>
-                    </div>
+    <div class="main-container">
+        <!-- LEFT: Input Form -->
+        <div class="form-pane">
+            <form id="auditForm">
+                <div class="form-group">
+                    <label class="form-label">1. Profil Instytutu</label>
+                    <textarea class="form-control" id="profile"
+                        placeholder="Zdefiniuj obszar kompetencji..."></textarea>
                 </div>
 
-                <div class="info-card">
-                    <h3 class="card-title">Kryteria Oceny</h3>
-                    <ul class="info-text" style="padding-left: 20px;">
-                        <li>Zgodność z profilem instytutu</li>
-                        <li>Potencjał komercjalizacji</li>
-                        <li>Brak wdrożeń "wewnętrznych"</li>
-                    </ul>
-                </div>
-            </aside>
-
-            <!-- Main Content -->
-            <main>
-                <div class="content-area">
-                    <form id="auditForm">
-                        <div class="form-group">
-                            <label class="form-label">1. Profil Instytutu</label>
-                            <textarea class="form-control" id="profile" rows="4" placeholder="Opisz profil badawczy..."></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">2. Cel Projektu</label>
-                            <textarea class="form-control" id="goal" rows="2" placeholder="Jaki jest główny cel..."></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">3. Innowacje</label>
-                            <textarea class="form-control" id="innovations" rows="2" placeholder="Główne cechy innowacyjne..."></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">4. Rezultaty</label>
-                            <textarea class="form-control" id="results" rows="2" placeholder="Planowane wyniki i wdrożenia..."></textarea>
-                        </div>
-
-                        <div class="submit-container">
-                            <button type="submit" class="submit-btn" id="submitBtn">
-                                Uruchom Audyt <span class="loader" id="loader"></span>
-                            </button>
-                        </div>
-                    </form>
+                <div class="form-group">
+                    <label class="form-label">2. Cel Projektu</label>
+                    <textarea class="form-control" id="goal" rows="3"
+                        placeholder="Główne założenia projektu..."></textarea>
                 </div>
 
-                <!-- Results -->
-                <div class="results-section" id="resultsSection">
-                    <div class="result-header">
-                        <div class="result-title">Raport z Audytu</div>
-                        <div class="verdict-badge" id="verdictBadge">?</div>
-                    </div>
-                    <div class="result-content markdown-body" id="analysisContent">
-                        <!-- Content will be injected here -->
-                    </div>
+                <div class="form-group">
+                    <label class="form-label">3. Innowacje</label>
+                    <textarea class="form-control" id="innovations" rows="3"
+                        placeholder="Unikalne cechy i nowości..."></textarea>
                 </div>
-            </main>
+
+                <div class="form-group">
+                    <label class="form-label">4. Rezultaty</label>
+                    <textarea class="form-control" id="results" rows="3" placeholder="Wdrożenia i efekty..."></textarea>
+                </div>
+
+                <div class="action-area">
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        Rozpocznij Analizę <div class="loader" id="loader"></div>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- RIGHT: Results -->
+        <div class="results-pane" id="resultsPane">
+
+            <!-- Empty State -->
+            <div class="empty-state">
+                <div class="empty-icon">📝</div>
+                <h3>Oczekiwanie na dane</h3>
+                <p>Uzupełnij formularz po lewej stronie i kliknij "Rozpocznij Analizę", aby otrzymać wynik.</p>
+            </div>
+
+            <!-- Result Card -->
+            <div class="result-card">
+                <div class="result-header">
+                    <div style="font-weight: 700; color: var(--text-secondary);">WYNIK AUDYTU</div>
+                    <div class="verdict-badge" id="verdictBadge">...</div>
+                </div>
+                <div class="card-body" id="analysisContent">
+                    <!-- Content injected via JS -->
+                </div>
+            </div>
 
         </div>
     </div>
 
-    <!-- Logic -->
     <script>
-        document.getElementById('auditForm').addEventListener('submit', async function(e) {
+        const API_URL = "http://localhost:8000/validate"; // CHANGE_ME
+
+        document.getElementById('auditForm').addEventListener('submit', async function (e) {
             e.preventDefault();
-            
-            // UI State
+
             const btn = document.getElementById('submitBtn');
             const loader = document.getElementById('loader');
-            const resultsSection = document.getElementById('resultsSection');
-            
-            btn.disabled = true;
-            loader.style.display = 'inline-block';
-            resultsSection.style.display = 'none';
+            const pane = document.getElementById('resultsPane');
 
-            // Gather Data
+            // UI Loading State
+            btn.disabled = true;
+            btn.innerHTML = 'Przetwarzanie... <div class="loader" style="display:inline-block"></div>';
+
             const data = {
                 institute_profile: document.getElementById('profile').value,
                 project_goal: document.getElementById('goal').value,
@@ -415,76 +399,60 @@
                 model: "gpt-oss:120b"
             };
 
-            // Basic Validation
             if (!data.institute_profile || !data.project_goal) {
-                alert("Proszę wypełnić przynajmniej Profil Instytutu i Cel Projektu.");
-                resetUI();
+                alert("Uzupełnij wymagane pola.");
+                resetBtn();
                 return;
             }
 
             try {
-                // Call API
-                // CHANGE THIS URL IF NEEDED
-                const API_URL = "http://localhost:8000/validate";
-                
                 const response = await fetch(API_URL, {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        // "x-api-key": "tajnehaslo123" // Uncomment if security is enabled
-                    },
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(data)
                 });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                if (!response.ok) throw new Error("Błąd sieci: " + response.status);
 
                 const result = await response.json();
-                
-                // Display Results
-                displayResults(result);
+                showResults(result);
 
-            } catch (error) {
-                console.error("Error:", error);
-                alert("Błąd połączenia z API: " + error.message);
+            } catch (err) {
+                alert("Błąd: " + err.message);
             } finally {
-                resetUI();
+                resetBtn();
             }
         });
 
-        function displayResults(data) {
-            const resultsSection = document.getElementById('resultsSection');
-            const verdictBadge = document.getElementById('verdictBadge');
-            const analysisContent = document.getElementById('analysisContent');
+        function showResults(data) {
+            const pane = document.getElementById('resultsPane');
+            const badge = document.getElementById('verdictBadge');
+            const content = document.getElementById('analysisContent');
 
-            // Verdict Styling
-            verdictBadge.textContent = data.verdict;
-            verdictBadge.className = 'verdict-badge ' + 
-                (data.verdict === 'GO' ? 'verdict-go' : 'verdict-no-go');
+            pane.classList.add('has-results');
 
-            // Format Analysis Text (Simple Markdown-like replacement)
-            let formattedText = data.full_analysis
-                .replace(/### (.*?)\n/g, '<h3>$1</h3>') // Headers
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
-                .replace(/\n/g, '<br>'); // Newlines
+            // Set Verdict
+            badge.innerText = data.verdict;
+            badge.className = 'verdict-badge ' + (data.verdict === 'GO' ? 'verdict-go' : 'verdict-no-go');
 
-            analysisContent.innerHTML = formattedText;
-            
-            // Show Section
-            resultsSection.style.display = 'block';
-            
-            // Smooth Scroll
-            resultsSection.scrollIntoView({ behavior: 'smooth' });
+            // Set Content
+            let formatted = data.full_analysis
+                .replace(/### (.*?)\n/g, '<h3>$1</h3>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>');
+
+            // Clean up marker if visible
+            formatted = formatted.replace(/<<<WERDYKT:.*?>>>/g, '');
+
+            content.innerHTML = formatted;
         }
 
-        function resetUI() {
+        function resetBtn() {
             const btn = document.getElementById('submitBtn');
-            const loader = document.getElementById('loader');
             btn.disabled = false;
-            loader.style.display = 'none';
+            btn.innerHTML = 'Rozpocznij Analizę <div class="loader" id="loader"></div>';
         }
     </script>
-
 </body>
+
 </html>
