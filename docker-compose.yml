@@ -32,6 +32,25 @@ services:
     networks:
       - chat-net
 
+  api:
+    build:
+      context: .
+      dockerfile: app/Dockerfile
+    container_name: grant-api
+    command: uvicorn api.main:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+      # - API_KEY=tajnehaslo123 # Uncomment to override default
+    depends_on:
+      - ollama
+    volumes:
+      - ./api:/app/api
+    restart: always
+    networks:
+      - chat-net
+
 volumes:
   ollama_data:
 
